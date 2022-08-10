@@ -1,3 +1,6 @@
 id,bought_id,product_name,sell_price,quantity
 1,1,banana, 1.09, 5
 
+3,orange,1.99,105
+4,orange,1.99,105
+5,orange,1.99,105

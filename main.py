@@ -90,12 +90,14 @@ def link_buy_sold():
 def change_quanity():
     try:
         df = pd.read_csv('superpy/instock.csv', index_col='product_name')
+        if (df.loc[args.product_name, 'quantity'] -args.quantity) < 0:
+            return 'not enough product in stock'
         df.loc[args.product_name, 'quantity'] = (df.loc[args.product_name, 'quantity'] -args.quantity)
         # Write DataFrame to CSV file
         df.to_csv('superpy/instock.csv')
     except KeyError:
         print ('This product is not in stock')
-    return 
+    return
 
 if __name__ == "__main__":
     if args.command == 'inventory':
