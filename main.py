@@ -104,11 +104,15 @@ def show_expired():
     #update expired products
     df = pd.read_csv('superpy/instock.csv')
     df_ex = pd.read_csv('superpy/expired.csv')
-    expired_product = df.loc[df["expiration_date"] < date_today]
-    pd.concat([df_ex, expired_product]).to_csv('superpy/expired.csv', index= False)
-    df.loc[df["expiration_date"] >= date_today].to_csv('superpy/instock.csv', index= False)
+    if args.show == 'update':
+        if date_today == date.today():
+            expired_product = df.loc[df["expiration_date"] < date_today]
+            pd.concat([df_ex, expired_product]).to_csv('superpy/expired.csv', index= False)
+            df.loc[df["expiration_date"] >= date_today].to_csv('superpy/instock.csv', index= False)
+        else:
+            print('set advance_time to 0 first')
     #show expired products
-    if args.show == 'today':
+    elif args.show == 'today':
         return df[(df['expiration_date'] == date_today)].to_string(index=False)
     elif args.show == 'yesterday':
         return df_ex[(df_ex['expiration_date'] == date_yesterday)].to_string(index=False)
@@ -117,7 +121,7 @@ def show_expired():
     elif args.show == 'all':
         return df_ex.to_string(index=False)
     else:
-        return 'Expired products updated'
+        print('Invalid usage')
    
 
 #write csv files
@@ -126,7 +130,7 @@ def buy_product():
     try:
         datetime.strptime(args.expiration_date, '%Y-%m-%d')
     except ValueError:
-        return "Incorrect date format, should be YYYY-MM-DD"
+        print("Incorrect date format, should be YYYY-MM-DD")
     with open('superpy/bought.csv', 'a+', newline='') as write_obj:
         csv_writer = csv.writer(write_obj)
         # making an ID
@@ -165,11 +169,20 @@ def change_quantity():
     try:
         df = pd.read_csv('superpy/instock.csv', index_col='product_name')
         # look if enough products are in stock
-        if (df.loc[args.product_name, 'quantity'] -args.quantity) < 0:
-            return 'not enough product in stock'
-        df.loc[args.product_name, 'quantity'] = (df.loc[args.product_name, 'quantity'] -args.quantity)
+        try:
+            if (df.loc[args.product_name, 'quantity'] -args.quantity) < 0:
+                print('not enough product in stock')
+            df.loc[args.product_name, 'quantity'] = (df.loc[args.product_name, 'quantity'] -args.quantity)
+        except ValueError:
+            products = (df.loc[args.product_name])
+            if products['quantity'].sum() < args.quantity:
+                print('not enough products in stock')
+
+                
+
         # Write new quantity to CSV file
         df.to_csv('superpy/instock.csv')
+       
     except KeyError:
         print ('This product is not in stock')
     return 'OK'
@@ -226,7 +239,7 @@ def show_profit():
         print('Invalid usage')
 
 def advancetime():
-    with open('superpy/date.txt','r+') as date_file:
+    with open('superpy/date.txt','w') as date_file:
         new_date = date.today() + timedelta(days= args.number)
         date_file.write(str(new_date))
         print('OK')
@@ -259,4 +272,6 @@ if __name__ == "__main__":
         print(show_revenue())
     elif args.command == 'profit':
         print(show_profit())
+    elif args.command == 'advance_time':
+        print(advancetime())
     main()

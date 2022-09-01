@@ -7,3 +7,5 @@ id,product_name,buy_price,quantity,expiration_date,buy_date
 6,orange,0.99,6,2022-09-06,2022-09-01
 7,orange,0.99,6,2022-09-06,2022-09-01
 8,orange,0.99,6,2022-09-06,2022-09-01
+9,bread,1.0,3,2022-09-01,2022-09-01
+10,bread,1.0,3,2022-09-03,2022-09-01

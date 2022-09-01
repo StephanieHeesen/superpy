@@ -1,3 +1,5 @@
 product_name,bought_id,quantity,expiration_date
 orange,7,6,2022-09-06
-orange,8,6,2022-09-06
+orange,8,6,2022-09-02
+bread,9,3,2022-09-01
+bread,10,3,2022-09-03
