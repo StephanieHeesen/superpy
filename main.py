@@ -50,7 +50,7 @@ sell.add_argument('-product_name', type=str, help= 'name of the product')
 sell.add_argument('-sell_price', type=float, help= "price for 1 sold product in 0.00 euro's")
 sell.add_argument('-quantity', type=int, help= 'amount of sold products')
 
-# command line for revenue
+# command line for revenue and profit
 revenue = subparser.add_parser('revenue')
 revenue.add_argument('show', type=str, choices=['today', 'yesterday', 'last_month', 'last_year'], 
                         help='choose between: today, yesterday, last_month or last_year')
@@ -59,14 +59,12 @@ profit = subparser.add_parser('profit')
 profit.add_argument('show', type=str, choices=['today', 'yesterday', 'last_month', 'last_year'], 
                         help='choose between: today, yesterday, last_month or last_year')
 
+# command line for advanced time
+advance_time = subparser.add_parser('advance_time')
+advance_time.add_argument('number', type=int, 
+                        help='the amount of days you will look in advance')
+
 args = parser.parse_args()
-
-
-# setting dates
-date_today = date.today().strftime("%Y-%m-%d")
-date_yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
-date_last_month = (date.today() - timedelta(days=30)).strftime("%Y-%m-%d")
-date_last_year = (date.today() - timedelta(days=365)).strftime("%Y-%m-%d")
 
 
 #open en show csv files
@@ -85,6 +83,8 @@ def show_sold():
         return df[(df['sell_date'] >= date_last_month)].to_string(index=False)
     elif args.date == 'all':
         return df.to_string(index=False)
+    else:
+        print('Invalid usage')
     
 
 def show_bought():
@@ -97,6 +97,8 @@ def show_bought():
         return df[(df['buy_date'] >= date_last_month)].to_string(index=False)
     elif args.date == 'all':
         return df.to_string(index=False)
+    else:
+        print('Invalid usage')
 
 def show_expired():
     #update expired products
@@ -116,7 +118,7 @@ def show_expired():
         return df_ex.to_string(index=False)
     else:
         return 'Expired products updated'
-    
+   
 
 #write csv files
 def buy_product():
@@ -190,6 +192,8 @@ def show_revenue():
         df1 = df.loc[df['sell_date'] == date_last_year]
         revenue_last_year = (df1['quantity'] * df1['sell_price']).sum()
         return f'revenue last year: {revenue_last_year}'
+    else:
+        print('Invalid usage')
         
 def show_profit():
     df_s = pd.read_csv('superpy/sold.csv')
@@ -218,7 +222,24 @@ def show_profit():
         cost = (df2['buy_price'] * df1['quantity']).sum()
         revenue_last_year = (df1['quantity'] * df1['sell_price']).sum()
         return f'profit last year: {revenue_last_year - cost}'
+    else:
+        print('Invalid usage')
 
+def advancetime():
+    with open('superpy/date.txt','r+') as date_file:
+        new_date = date.today() + timedelta(days= args.number)
+        date_file.write(str(new_date))
+        print('OK')
+
+def datetoday():
+    with open('superpy/date.txt','r') as file:
+        date = file.read()
+        return date
+
+date_today = datetoday() #date.today().strftime("%Y-%m-%d")
+date_yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+date_last_month = (date.today() - timedelta(days=30)).strftime("%Y-%m-%d")
+date_last_year = (date.today() - timedelta(days=365)).strftime("%Y-%m-%d")
 
 
 if __name__ == "__main__":
