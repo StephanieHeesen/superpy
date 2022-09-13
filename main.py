@@ -5,6 +5,7 @@ import csv
 from datetime import datetime, date, timedelta
 from operator import index
 import pandas as pd
+from rich import table
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -178,7 +179,7 @@ def change_quantity():
             if products['quantity'].sum() < args.quantity:
                 print('not enough products in stock')
 
-                
+                ###### nog niet klaar
 
         # Write new quantity to CSV file
         df.to_csv('superpy/instock.csv')
