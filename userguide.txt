@@ -1,0 +1,133 @@
+Userguide voor Superpy
+
+In deze gebruiksaanwijzing staat uitgelegd hoe om te gaan met superpy en worden voorbeelden gegeven.
+Als je niet weet wat precies in te vullen bij een commando kan je altijd -h of -help typen. Hierna word duidelijk 
+weergegeven wat er verwacht word.
+
+    BUY: Ingekocht product in het systeem zetten.
+Om een ingekocht product in het systeem te zetten gebruik je het commando: buy .
+Hierna moet je onderstaande gegevens invoeren.
+-product_name (naam van het product)
+-buy_price   (inkoopprijs van 1 product in 0.00 euro's)
+-quantity  (hoeveelheid van het product gekocht)
+-expiration_date (houdbaarheidsdatum van het product in yyyy-mm-dd) 
+
+Dit ziet er dan zo uit:
+python superpy/main.py buy -product_name milk -buy_price 0.65 -quantity 20 -expiration_date 2022-10-09
+
+Als de invoer goed is gegaan krijg je nadat je enter hebt ingevoerd een OK te zien.
+Nu staat dit product in het systeem.
+
+    IN_STOCK: Kijken wat er momenteel allemaal op voorraad is.
+Om te kijken wat er allemaal op voorraad is momenteel gebruik je het commando: in_stock .
+Hierna hoeft verder niets ingevoerd te worden en je krijg meteen een overzicht in een tabel met alle producten 
+die er zijn.
+
+Deze tabel ziet er zo uit:
+┃ product_name ┃ bought_id ┃ quantity ┃ expiration_date ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ orange       │ 7         │ 1        │ 2022-09-25      │
+├──────────────┼───────────┼──────────┼─────────────────┤
+│ bread        │ 9         │ 3        │ 2022-09-24      │
+├──────────────┼───────────┼──────────┼─────────────────┤
+│ milk         │ 11        │ 20       │ 2022-10-09      │
+
+    SELL: Een product verkopen.
+Om producten welke verkocht zijn in het systeem door te voeren gebruik je het commando: sell .
+Hierna moet je onderstaande informatie van het product invoeren.
+-product_name (naam van het product)
+-sell_price (verkoopprijs van 1 product in 0.00 euro's)
+-quantity (hoeveelheid van het verkochte product)
+
+Dit ziet er dan zo uit:
+python superpy/main.py sell -product_name milk -sell_price 1.10 -quantity 5
+
+Als dit goed is gegaan krijg je de melding OK.
+
+    BOUGHT_PRODUCTS en SOLD_PRODUCTS: Een overzicht krijgen van ingekochte of verkochte producten.
+Om een overzicht in een tabel te krijgen van welke producten er zijn gekocht of verkocht over een bepaalde
+tijd gebruik je: bought_products en sold_products.
+Hierna kan je kiezen uit een van de volgende opties:
+today (vandaag), yesterday (gisteren), last_month (afgelopen maand) en all (alles tot nu toe).
+
+Hieronder een voorbeeld van beide:
+python superpy/main.py bought_products today
+┏━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ id ┃ product_name ┃ buy_price ┃ quantity ┃ expiration_date ┃ buy_date   ┃
+┡━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ 11 │ milk         │ 0.65      │ 20       │ 2022-10-09      │ 2022-09-26 │
+└────┴──────────────┴───────────┴──────────┴─────────────────┴────────────┘
+
+python superpy/main.py sold_products today  
+┏━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┓
+┃ id ┃ bought_id ┃ product_name ┃ sell_price ┃ quantity ┃ sell_date  ┃
+┡━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━┩
+│ 4  │ 11        │ milk         │ 1.1        │ 5        │ 2022-09-26 │
+└────┴───────────┴──────────────┴────────────┴──────────┴────────────┘
+
+    REVENUE en PROFIT: De omzet en winst bekijken.
+Om te kijken naar de omzet (revenue) of de winst (profit) gebruik je deze commando's.
+Hierna kan je kiezen uit een van de volgende opties:
+today (vandaag), yesterday (gisteren), last_month (afgelopen maand) en last_year (afgelopen jaar).
+
+als je deze opvraagt ziet het er als volgt uit:
+python superpy/main.py revenue today      
+revenue today: 5.5
+
+python superpy/main.py profit today
+profit today: 2.25
+
+    ADVANCE_TIME: Het systeem een aantal dagen voor of achteruit zetten.
+Om bijvoorbeeld te kunnen kijken wat morgen of overmorgen over de datum is. Of om te kijken wat 2 dagen geleden
+ingekocht is. Kan je gebruik maken van de commando: advance_time .
+
+De datum naar vandaag zetten doe je met:
+python superpy/main.py advance_time 0
+
+Als je wilt kijken naar 2 dagen geleden:
+python superpy/main.py advance_time -2 
+
+Als je hierna bijvoorbeeld bought_products today invoert dan krijg je de ingekochte producten van 2 dagen geleden.
+
+    EXPIRED: Het updaten en bekijken van de producten die overdatum zijn.
+Om je stock bij de werken en de overdatum producten uit je voorraad te halen of om te kijken welke producten 
+er over datum zijn gegaan gebruik je het commando: expired .
+Hierna kan je kiezen uit de volgende opties:
+update, today, yesterday, last_month en all
+
+Bij expired update zijn de volgende 2 uitkomsten mogelijk:
+python superpy/main.py expired update
+OK
+
+python superpy/main.py expired update
+set advance_time to 0 first
+
+Bij het bovenste voorbeeld zijn alle producten nu geupdate.
+Bij het onderste voobeeld moet je eerst advance_time naar 0 zetten via het commando advance_time 0.
+Hierna moet je nog een keer het commande expired update uitvoeren om de update van de producten door te voeren.
+
+Als je bijvoorbeeld expired today gebruikt krijg je een overzicht met de producten die vandaag overdatum gaan.
+Dit ziet er dan als volgt uit.
+python superpy/main.py expired today
+┏━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ product_name ┃ bought_id ┃ quantity ┃ expiration_date ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ bread        │ 2         │ 10       │ 2022-09-29      │
+└──────────────┴───────────┴──────────┴─────────────────┘
+
+    CHARITY: Het maken van een pdf bestand met producten die morgen op de houdbaarheidsdatum zijn.
+Dit commando is bedoeld om makkelijk een pdf bestand naar bijvoorbeeld de voedselbank te sturen met producten 
+welke de volgende dag op de datum zijn en zij mogelijk mogen ophalen.
+
+De volgende 2 uitkomsten zijn hier mogelijk:
+python superpy/main.py charity
+PDF file made
+
+python superpy/main.py charity
+No products for charity today
+
+Bij het bovenste voorbeeld is het PDF bestand gemaakt. Deze is te vinden in superpy/charity_pdf_files.
+Als je wilt dat deze file bewaard blijft en niet word overschreven dan moet je deze een nieuwe naam geven. Anders
+word je gemaakte PDF file de volgende keer dat het commando charity wordt ingevoerd overschreven.
+
+
