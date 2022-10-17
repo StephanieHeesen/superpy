@@ -1,3 +1,6 @@
 id,bought_id,product_name,sell_price,quantity,sell_date
 1,2,milk,1.1,5,2022-10-01
 2,3,bread,1.99,2,2022-10-01
+3,1,wine,0.5,1,2022-10-15
+4,1,wine,6.5,1,2022-10-15
+

@@ -1,2 +1,4 @@
 product_name,bought_id,quantity,expiration_date
 bread,4,1,2022-09-30
+milk,2,15,2022-10-09
+bread,3,15,2022-10-03

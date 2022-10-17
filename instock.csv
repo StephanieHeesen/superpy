@@ -1,4 +1,5 @@
 product_name,bought_id,quantity,expiration_date
-wine,1,6,2023-10-09
-milk,2,15,2022-10-09
-bread,3,15,2022-10-03
+wine,1,1,2023-10-09
+cheese,5,3,2023-02-01
+milk,6,1,2022-10-29
+milk,7,3,2022-10-30
