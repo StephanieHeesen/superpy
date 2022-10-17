@@ -113,48 +113,75 @@ def sell_product():
             rowcount+= 1
         # match bought_id
         df = pd.read_csv('instock.csv', index_col='product_name')
-        try:
-            df2 = df.loc[m.args.product_name].sort_values('expiration_date')
-            bought_id = df2.iloc[0,0]
-        except ValueError:
-            bought_id = df.loc[m.args.product_name, 'bought_id']
-        if change_quantity() == 'OK':
-            # Add contents as last row in the csv file    
-            csv_writer.writerow([rowcount, bought_id, m.args.product_name, 
-                m.args.sell_price, m.args.quantity, date.today().strftime("%Y-%m-%d")])
-            return 'OK'
+        df1 = pd.read_csv('instock.csv')
+        if df['expiration_date'].min() < date_today:
+            return 'products are expired. Update the stock with expired update.'
+        else:
+            try:
+                df2 = df1.set_index('expiration_date').sort_index()
+                bought_id = df2.iloc[0,1]
+            except ValueError:
+                bought_id = df.loc[m.args.product_name, 'bought_id']
+            if change_quantity() == 'OK':
+                # Add contents as last row in the csv file    
+                csv_writer.writerow([rowcount, bought_id, m.args.product_name, 
+                    m.args.sell_price, m.args.quantity, date.today().strftime("%Y-%m-%d")])
+                return 'OK'
 
 
 
 def change_quantity():
-    # look if product is in stock.
+    # open csv files
     df = pd.read_csv('instock.csv', index_col= 'product_name')
     df1 = pd.read_csv('instock.csv')
     df6 = df1.set_index('bought_id')
+    # check if there are more lines of the same product in the file
     if df1['product_name'].str.contains(m.args.product_name).sum() > 1:
-        df2 = (df.loc[m.args.product_name]).sort_values('expiration_date')
-        id_old = df2.iloc[0,0]
+        df2 = df1.set_index('expiration_date').sort_index()
+        id_old = df2.iloc[0,1]
+        # check if quantity oldes product becomes 0
         if (df6.loc[id_old, 'quantity'] -m.args.quantity) == 0:
             df6 = df6.drop(id_old).reset_index().set_index('product_name')
             df6.to_csv('instock.csv')
             return 'OK'
         elif (df6.loc[id_old, 'quantity'] -m.args.quantity) < 0:
-            print('Not enough product in stock')
+            # check if quantity combined is enough.
+            if df.loc[m.args.product_name, 'quantity'].sum() >= m.args.quantity:
+                quantity = m.args.quantity
+                # loop takes products from multiple lines
+                while quantity > 0:
+                    df = pd.read_csv('instock.csv', index_col= 'product_name')
+                    df1 = pd.read_csv('instock.csv')
+                    df6 = df1.set_index('bought_id')
+                    df2 = df1.set_index('expiration_date').sort_index()
+                    id_old = df2.iloc[0,1]
+                    old_quantity = df6.loc[id_old, 'quantity']
+                    if quantity - old_quantity  >= 0:
+                        df6 = df6.drop(id_old).reset_index().set_index('product_name')
+                        df6.to_csv('instock.csv')
+                        quantity = quantity - old_quantity 
+                        continue
+                    else:
+                        df6.loc[id_old, 'quantity'] = (old_quantity - quantity)
+                        df6 = df6.reset_index().set_index('product_name')
+                        df6.to_csv('instock.csv')
+                        quantity = quantity - old_quantity
+                return 'OK'
+            else:
+                print('Not enough product in stock')
         else:
             df6.loc[id_old, 'quantity'] = (df6.loc[id_old, 'quantity']- m.args.quantity)
             df6 = df6.reset_index().set_index('product_name')
             df6.to_csv('instock.csv')
             return 'OK'   
-    # look if enough products are in stock
+    # change of quantity for product that is in 1 line
     elif (df.loc[m.args.product_name, 'quantity'] -m.args.quantity) >= 0:
         df.loc[m.args.product_name, 'quantity'] = (df.loc[m.args.product_name, 'quantity'] -m.args.quantity)
         # Write new quantity to CSV file
         df.to_csv('instock.csv')
         return 'OK'
-
-    
-
-
+    else:
+        print('not enough product in stock')
 
 
 def show_charity():
