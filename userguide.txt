@@ -13,7 +13,7 @@ Hierna moet je onderstaande gegevens invoeren.
 -expiration_date (houdbaarheidsdatum van het product in yyyy-mm-dd) 
 
 Dit ziet er dan zo uit:
-python superpy/main.py buy -product_name milk -buy_price 0.65 -quantity 20 -expiration_date 2022-10-09
+python main.py buy -product_name milk -buy_price 0.65 -quantity 20 -expiration_date 2022-10-09
 
 Als de invoer goed is gegaan krijg je nadat je enter hebt ingevoerd een OK te zien.
 Nu staat dit product in het systeem.
@@ -40,7 +40,7 @@ Hierna moet je onderstaande informatie van het product invoeren.
 -quantity (hoeveelheid van het verkochte product)
 
 Dit ziet er dan zo uit:
-python superpy/main.py sell -product_name milk -sell_price 1.10 -quantity 5
+python main.py sell -product_name milk -sell_price 1.10 -quantity 5
 
 Als dit goed is gegaan krijg je de melding OK.
 
@@ -51,14 +51,14 @@ Hierna kan je kiezen uit een van de volgende opties:
 today (vandaag), yesterday (gisteren), last_month (afgelopen maand) en all (alles tot nu toe).
 
 Hieronder een voorbeeld van beide:
-python superpy/main.py bought_products today
+python main.py bought_products today
 ┏━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┓
 ┃ id ┃ product_name ┃ buy_price ┃ quantity ┃ expiration_date ┃ buy_date   ┃
 ┡━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━┩
 │ 11 │ milk         │ 0.65      │ 20       │ 2022-10-09      │ 2022-09-26 │
 └────┴──────────────┴───────────┴──────────┴─────────────────┴────────────┘
 
-python superpy/main.py sold_products today  
+python main.py sold_products today  
 ┏━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┓
 ┃ id ┃ bought_id ┃ product_name ┃ sell_price ┃ quantity ┃ sell_date  ┃
 ┡━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━┩
@@ -71,10 +71,10 @@ Hierna kan je kiezen uit een van de volgende opties:
 today (vandaag), yesterday (gisteren), last_month (afgelopen maand) en last_year (afgelopen jaar).
 
 als je deze opvraagt ziet het er als volgt uit:
-python superpy/main.py revenue today      
+python main.py revenue today      
 revenue today: 5.5
 
-python superpy/main.py profit today
+python main.py profit today
 profit today: 2.25
 
     ADVANCE_TIME: Het systeem een aantal dagen voor of achteruit zetten.
@@ -82,10 +82,10 @@ Om bijvoorbeeld te kunnen kijken wat morgen of overmorgen over de datum is. Of o
 ingekocht is. Kan je gebruik maken van de commando: advance_time .
 
 De datum naar vandaag zetten doe je met:
-python superpy/main.py advance_time 0
+python main.py advance_time 0
 
 Als je wilt kijken naar 2 dagen geleden:
-python superpy/main.py advance_time -2 
+python main.py advance_time -2 
 
 Als je hierna bijvoorbeeld bought_products today invoert dan krijg je de ingekochte producten van 2 dagen geleden.
 
@@ -96,10 +96,10 @@ Hierna kan je kiezen uit de volgende opties:
 update, today, yesterday, last_month en all
 
 Bij expired update zijn de volgende 2 uitkomsten mogelijk:
-python superpy/main.py expired update
+python main.py expired update
 OK
 
-python superpy/main.py expired update
+python main.py expired update
 set advance_time to 0 first
 
 Bij het bovenste voorbeeld zijn alle producten nu geupdate.
@@ -108,7 +108,7 @@ Hierna moet je nog een keer het commande expired update uitvoeren om de update v
 
 Als je bijvoorbeeld expired today gebruikt krijg je een overzicht met de producten die vandaag overdatum gaan.
 Dit ziet er dan als volgt uit.
-python superpy/main.py expired today
+python main.py expired today
 ┏━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
 ┃ product_name ┃ bought_id ┃ quantity ┃ expiration_date ┃
 ┡━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
@@ -120,10 +120,10 @@ Dit commando is bedoeld om makkelijk een pdf bestand naar bijvoorbeeld de voedse
 welke de volgende dag op de datum zijn en zij mogelijk mogen ophalen.
 
 De volgende 2 uitkomsten zijn hier mogelijk:
-python superpy/main.py charity
+python main.py charity
 PDF file made
 
-python superpy/main.py charity
+python main.py charity
 No products for charity today
 
 Bij het bovenste voorbeeld is het PDF bestand gemaakt. Deze is te vinden in superpy/charity_pdf_files.

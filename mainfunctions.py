@@ -88,20 +88,23 @@ def buy_product():
         datetime.strptime(m.args.expiration_date, '%Y-%m-%d')
     except ValueError:
         print("Incorrect date format, should be YYYY-MM-DD")
-    with open('bought.csv', 'a+', newline='') as write_obj:
-        csv_writer = csv.writer(write_obj)
-        # making an ID
-        rowcount  = 0
-        for row in open("bought.csv"):
-            rowcount+= 1
-        # Add contents of list as last row in the csv file
-        csv_writer.writerow([rowcount, m.args.product_name, m.args.buy_price, 
-            m.args.quantity, m.args.expiration_date, date.today().strftime("%Y-%m-%d")])
-        # Add new products to instock file
-        with open('instock.csv', 'a+', newline='') as write_obj:
+    if m.args.expiration_date < date_today:
+            return 'products are expired.'
+    else:
+        with open('bought.csv', 'a+', newline='') as write_obj:
             csv_writer = csv.writer(write_obj)
-            csv_writer.writerow([m.args.product_name, rowcount, m.args.quantity, m.args.expiration_date])
-            return 'OK'
+            # making an ID
+            rowcount  = 0
+            for row in open("bought.csv"):
+                rowcount+= 1
+            # Add contents of list as last row in the csv file
+            csv_writer.writerow([rowcount, m.args.product_name, m.args.buy_price, 
+                m.args.quantity, m.args.expiration_date, date.today().strftime("%Y-%m-%d")])
+            # Add new products to instock file
+            with open('instock.csv', 'a+', newline='') as write_obj:
+                csv_writer = csv.writer(write_obj)
+                csv_writer.writerow([m.args.product_name, rowcount, m.args.quantity, m.args.expiration_date])
+                return 'OK'
             
 
 def sell_product():
